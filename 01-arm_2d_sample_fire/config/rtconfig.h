@@ -50,12 +50,12 @@
 /* Kernel Device Object */
 
 /* #define RT_USING_DEVICE */
-#define RT_USING_CONSOLE 
-#define RT_CONSOLEBUF_SIZE 128
-#define RT_CONSOLE_DEVICE_NAME "uart0"
-#define RT_PRINTF_LONGLONG
-#define RT_VER_NUM 0x40004
-#define RT_CONSOLE_BAUDRATE 115200
+//#define RT_USING_CONSOLE 
+//#define RT_CONSOLEBUF_SIZE 128
+//#define RT_CONSOLE_DEVICE_NAME "uart0"
+//#define RT_PRINTF_LONGLONG
+//#define RT_VER_NUM 0x40004
+//#define RT_CONSOLE_BAUDRATE 115200
 /* RT-Thread Components */
 
 #define RT_USING_COMPONENTS_INIT

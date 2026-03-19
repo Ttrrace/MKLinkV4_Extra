@@ -23,12 +23,54 @@
 /*============================ MACROS ========================================*/
 /*============================ MACROFIED FUNCTIONS ===========================*/
 /*============================ TYPES =========================================*/
+#if defined (_MSC_VER) 
+#   include <stdint.h>
+#   define __STATIC_FORCEINLINE static __forceinline
+#   define __STATIC_INLINE static __inline
+#   define __ALIGNED(x) __declspec(align(x))
+#   define __WEAK __attribute__((weak))
+#elif defined ( __APPLE_CC__ )
+#   include <stdint.h>
+#   define  __ALIGNED(x) __attribute__((aligned(x)))
+#   define __STATIC_FORCEINLINE static inline __attribute__((always_inline)) 
+#   define __STATIC_INLINE static inline
+#   define __WEAK __attribute__((weak))
+#else
+#   include <stdint.h>
+#   define  __ALIGNED(x) __attribute__((aligned(x)))
+#   define __STATIC_FORCEINLINE static inline __attribute__((always_inline)) 
+#   define __STATIC_INLINE static inline
+#   define __WEAK __attribute__((weak))
+#endif
+
 typedef uint32_t perfc_global_interrupt_status_t;
 
 /*============================ GLOBAL VARIABLES ==============================*/
 /*============================ LOCAL VARIABLES ===============================*/
 /*============================ PROTOTYPES ====================================*/
 /*============================ IMPLEMENTATION ================================*/
+
+static
+inline 
+perfc_global_interrupt_status_t perfc_port_mask_systimer_interrupt(void)
+{
+    perfc_global_interrupt_status_t tStatus;
+    
+    /* get global interrupt status */
+    /* disable global interrupt */
+    /* return the status */
+    tStatus = disable_global_irq(CSR_MSTATUS_MIE_MASK);
+    return tStatus;
+    
+}
+
+static
+inline  
+void perfc_port_resume_systimer_interrupt(perfc_global_interrupt_status_t tStatus)
+{
+    restore_global_irq(tStatus);
+    /* resume the stored global interrupt status */
+}
 
 static
 inline 

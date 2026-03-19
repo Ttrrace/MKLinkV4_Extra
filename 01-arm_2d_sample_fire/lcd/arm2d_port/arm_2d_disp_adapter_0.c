@@ -19,7 +19,6 @@
 /*============================ INCLUDES ======================================*/
 
 #include "arm_2d_disp_adapter_0.h"
-#include "arm_2d_user_navigation.h"
 #ifdef RTE_Acceleration_Arm_2D_Helper_Disp_Adapter0
 
 #include <stdio.h>
@@ -967,7 +966,6 @@ void disp_adapter0_init(void)
 #endif
 
     disp_adapter0_navigator_init();
-    disp_adapter0_user_navigator_init();
 
     DISP0_ADAPTER.Benchmark.lTimestamp = arm_2d_helper_get_system_timestamp();
 

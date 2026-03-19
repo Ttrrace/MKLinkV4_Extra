@@ -1,19 +1,10 @@
-#include "arm_2d_scene_user_text_tracking_list.h"
-#include "arm_2d_scene_user_rickrolling.h"
+
 #include "arm_2d_scene_user_matrix.h"
-#include "arm_2d_scene_user_button.h"
-#include "arm_2d_scene_user_menu.h"
-#include "arm_2d_scene_user_waveform.h"
-#include "arm_2d_user_scene_lmsk.h"
-#include "arm_2d_user_scene_large_lmsk.h"
-#include "arm_2d_user_scene_qoi_animation.h"
-#include "scope_task.h"
 #include "ref_gui.h"
 #include "st7789.h"
 #include "rtt_port.h"
 #include "rtthread.h"
 #include "board.h"
-#include "microlink_board.h"
 #include <hpm_ewdg_drv.h>
 static void EWDG_Init(void);
 
@@ -48,7 +39,7 @@ static const ref_gui_cfg_t c_tCFG = {
     .chPipelineNo = dimof(s_tPointerPipelines),
 };
 
-user_scene_waveform_t *ptwaveform;  //在scope_task调用 全局
+
 
 void app_init(ref_gui_t *ptGUI)
 {
@@ -57,44 +48,13 @@ void app_init(ref_gui_t *ptGUI)
     arm_2d_scene_player_t *ptDispAdapter = rg_get_disp_adapter(ptGUI);
     arm_2d_scene_player_flush_fifo(ptDispAdapter);
 
-    //user_scene_matrix_t *ptLmsk
-    //    = arm_2d_scene_lmsk_init(ptDispAdapter);
-    //assert(NULL != ptLmsk);
-    //ptLmsk->ptGUI = ptGUI;
 
-    //user_scene_large_lmsk_t *ptLageLmsk
-    //    = arm_2d_scene_large_lmsk_init(ptDispAdapter);
-    //assert(NULL != ptLageLmsk);
-    //ptLageLmsk->ptGUI = ptGUI;
-
-    //user_scene_qoi_animation_t *ptQoi
-    //    = arm_2d_scene_qoi_animation_init(ptDispAdapter);
-    //assert(NULL != ptQoi);
-    //ptQoi->ptGUI = ptGUI;
 
     user_scene_matrix_t *ptMaterix 
         = arm_2d_scene_matrix_init(ptDispAdapter);
     assert(NULL != ptMaterix);
     ptMaterix->ptGUI = ptGUI;
 
-    //user_scene_rickrolling_t *ptRickrolling 
-    //    = arm_2d_scene_rickrolling_init(ptDispAdapter);
-    //assert(NULL != ptRickrolling);
-    //ptRickrolling->ptGUI = ptGUI;
-
-    //user_scene_button_t *ptDownload
-    //    = arm_2d_scene_button_init(ptDispAdapter);
-    //assert(NULL != ptDownload);
-    //ptDownload->ptGUI = ptGUI;
-
-    //user_scene_menu_t *ptScope
-    //    = arm_2d_scene_menu_init(ptDispAdapter);
-    //assert(NULL != ptScope);
-    //ptScope->ptGUI = ptGUI;
-
-    //ptwaveform = arm_2d_scene_waveform_init(ptDispAdapter);
-    //assert(NULL != ptwaveform);
-    //ptwaveform->ptGUI = ptGUI;  
 
 }
 
@@ -129,7 +89,6 @@ int arm_2d_scene_app_player_init(void)
                    25, 10);
     rt_thread_startup(&arm_2d_thread);
     rt_thread_mdelay(1000);
-    scope_task_init();
     return RT_EOK;
 }
 
