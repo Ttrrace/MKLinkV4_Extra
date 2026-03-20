@@ -1,4 +1,4 @@
-
+#include "arm_2d_scene_0.h"
 #include "arm_2d_scene_user_matrix.h"
 #include "ref_gui.h"
 #include "st7789.h"
@@ -49,11 +49,15 @@ void app_init(ref_gui_t *ptGUI)
     arm_2d_scene_player_flush_fifo(ptDispAdapter);
 
 
+    user_scene_matrix_t *ptFire
+        = arm_2d_scene0_init(ptDispAdapter);
+    assert(NULL != ptFire);
+    ptFire->ptGUI = ptGUI;
 
-    user_scene_matrix_t *ptMaterix 
-        = arm_2d_scene_matrix_init(ptDispAdapter);
-    assert(NULL != ptMaterix);
-    ptMaterix->ptGUI = ptGUI;
+    //user_scene_matrix_t *ptMaterix 
+    //    = arm_2d_scene_matrix_init(ptDispAdapter);
+    //assert(NULL != ptMaterix);
+    //ptMaterix->ptGUI = ptGUI;
 
 
 }
@@ -73,7 +77,7 @@ static void arm_2d_thread_entry(void *parameter)
     rg_init(&g_tMyGUI, (ref_gui_cfg_t *)&c_tCFG);
     app_init(&g_tMyGUI);
     while(1) {
-        rg_task(&g_tMyGUI, 30);
+        rg_task(&g_tMyGUI, -1);
         ewdg_refresh(HPM_EWDG0);
     }
 }

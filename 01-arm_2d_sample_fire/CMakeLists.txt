@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 SET(STACK_SIZE 0x1000)
-SET(HEAP_SIZE 0x8000)
+SET(HEAP_SIZE 0x6000)
 
 set(APP_NAME "MicroLink")
 set(CONFIG_CHERRYUSB 1)

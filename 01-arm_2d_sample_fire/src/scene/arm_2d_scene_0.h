@@ -30,6 +30,7 @@
 #include "arm_2d_helper.h"
 #include "arm_2d_example_controls.h"
 #include "user_generic_loader_fire.h"
+#include "ref_gui.h"
 
 
 #ifdef   __cplusplus
@@ -107,7 +108,7 @@ ARM_PRIVATE(
 
 )
     /* place your public member here */
-    
+        ref_gui_t *ptGUI;    
 };
 
 /*============================ GLOBAL VARIABLES ==============================*/
