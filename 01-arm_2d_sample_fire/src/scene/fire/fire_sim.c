@@ -6,14 +6,14 @@
 #ifdef _WIN32
 #include <windows.h>
 #endif
-
+#include "board.h"
 
 int g_scale = 5;
 int g_canvasWidth = 60;
 int g_canvasHeight = 60;
 float cScale = 0.0f;
 
-static uint8_t fluid_mem[75*1024];
+static ATTR_RAMFUNC uint8_t fluid_mem[75*1024];
 Scene scene;  // 全局场景实例
 
 // 创建流体模拟实例

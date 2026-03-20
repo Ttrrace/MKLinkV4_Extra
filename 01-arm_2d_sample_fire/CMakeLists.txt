@@ -22,7 +22,8 @@ set(CONFIG_RTTHREAD_NANO 1)
 set(CUSTOM_GCC_LINKER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/linkers/gcc/flash_xip.ld)
 set(CUSTOM_SES_LINKER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/linkers/segger/flash_xip.icf)
 set(CUSTOM_IAR_LINKER_FILE ${CMAKE_CURRENT_SOURCE_DIR}/linkers/iar/flash_xip.icf)
-
+set(RV_ARCH "rv32imafc")
+set(RV_ABI "ilp32f")
 find_package(hpm-sdk REQUIRED HINTS $ENV{HPM_SDK_BASE})
 
 project(mklink_v4_app)
