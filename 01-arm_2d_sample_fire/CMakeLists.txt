@@ -91,6 +91,7 @@ sdk_app_inc(config)
 sdk_app_inc(src)
 sdk_app_inc(src/scene)
 sdk_app_inc(src/scene/scope)
+sdk_app_inc(src/scene/fire)
 sdk_app_inc(src/flm_elf_parser)
 
 sdk_app_src_glob(../external/Arm-2D/Library/Source/*.c)

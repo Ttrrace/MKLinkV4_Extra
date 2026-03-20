@@ -20,7 +20,7 @@
 #define __GENERIC_LOADER_INHERIT__
 #define __fire_sim_IMPLEMENT__
 
-#include "user_generic_loader_template.h"
+#include "user_generic_loader_fire.h"
 #include "fire_sim.h"
 #if defined(RTE_Acceleration_Arm_2D_Helper_PFB) && defined(RTE_Acceleration_Arm_2D_Extra_Loader)
 
