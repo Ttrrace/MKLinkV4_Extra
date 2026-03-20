@@ -226,8 +226,8 @@ arm_2d_err_t __fire_sim_draw(  arm_generic_loader_t *ptObj,
 	
 	Fluid *f = scene.fluid;
 
-	uint16_t drawW = 40;
-	uint16_t drawH = 40;
+	uint16_t drawW = 60;
+	uint16_t drawH = 60;
 
 	for (int_fast16_t iY = ptROI->tLocation.iY; iY < iYLimit; iY++) {
 

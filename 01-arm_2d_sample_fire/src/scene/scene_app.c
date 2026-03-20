@@ -12,7 +12,6 @@ ref_gui_t g_tMyGUI;
 static ngy_msg_t s_tMSGArray[32];
 static ngy_msg_pointer_frontend_pipeline_t s_tPointerPipelines[2];
 
-ATTR_RAMFUNC_WITH_ALIGNMENT(32) 
 static char arm_2d_stack[8192];
 static struct rt_thread arm_2d_thread;
 

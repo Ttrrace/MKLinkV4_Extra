@@ -13,7 +13,7 @@ int g_canvasWidth = 60;
 int g_canvasHeight = 60;
 float cScale = 0.0f;
 
-static ATTR_RAMFUNC uint8_t fluid_mem[75*1024];
+static ATTR_RAMFUNC uint8_t fluid_mem[96*1024];
 Scene scene;  // 全局场景实例
 
 // 创建流体模拟实例
@@ -723,7 +723,7 @@ int fire_init() {   //在场景初始化处调用
 	cScale = g_canvasHeight / simHeight;
 	float simWidth = g_canvasWidth / cScale;
 	
-	int numCells = 1600;
+	int numCells = 3600;
 	float h = sqrtf(simWidth * simHeight / numCells);
 	
 	int numX = (int)(simWidth / h);

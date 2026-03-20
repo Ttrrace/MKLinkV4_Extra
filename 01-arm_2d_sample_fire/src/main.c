@@ -18,7 +18,7 @@
 #include "ref_gui.h"
 #include "rtt_port.h"
 #include "rtthread.h"
-
+#include "key_task.h"
 
 void rt_hw_board_init(void)
 {
@@ -28,16 +28,18 @@ void rt_hw_board_init(void)
     rtt_base_init();
     
 }
-extern FRESULT flash_mount_fs(void);
+
 extern int arm_2d_scene_app_player_init(void);
 
 int main(void)
 {
     init_cycle_counter(false);
+    key_init();
+    key_encoder_init();
     arm_2d_scene_app_player_init();
     while(1) {
-
-          rt_thread_mdelay(1);
+        key_module_display(1);  
+        rt_thread_mdelay(1);
     }
 
     return 0;

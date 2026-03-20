@@ -205,11 +205,11 @@ IMPL_PFB_ON_DRAW(__pfb_draw_scene0_handler)
     ARM_2D_UNUSED(bIsNewFrame);
     
     arm_2d_canvas(ptTile, __top_canvas) {
-        arm_2d_align_centre(__top_canvas,120, 120) {
+        arm_2d_align_centre(__top_canvas,240, 240) {
             fire_sim_show(&fire_sim,ptTile,&__centre_region,1);
       }
-    /*-----------------------draw the scene end  -----------------------*/     
-    /*-----------------------draw the scene end  -----------------------*/
+      /*-----------------------draw the scene end  -----------------------*/     
+      /*-----------------------draw the scene end  -----------------------*/
     }
     ARM_2D_OP_WAIT_ASYNC();
 	
@@ -284,8 +284,8 @@ user_scene_0_t *__arm_2d_scene0_init(   arm_2d_scene_player_t *ptDispAdapter,
 
     /* ------------   initialize members of user_scene_0_t begin ---------------*/
     fire_sim_cfg_t  tCFG = {
-		.tSize.iHeight = 120,
-		.tSize.iWidth  = 120,
+		.tSize.iHeight = 240,
+		.tSize.iWidth  = 240,
 	
 		.ptScene = &this.use_as__arm_2d_scene_t,
 	};
