@@ -205,8 +205,9 @@ IMPL_PFB_ON_DRAW(__pfb_draw_scene0_handler)
     ARM_2D_UNUSED(bIsNewFrame);
     
     arm_2d_canvas(ptTile, __top_canvas) {
-		
-    fire_sim_show(&fire_sim,ptTile,&__top_canvas,1);
+        arm_2d_align_centre(__top_canvas,120, 120) {
+            fire_sim_show(&fire_sim,ptTile,&__centre_region,1);
+      }
     /*-----------------------draw the scene end  -----------------------*/     
     /*-----------------------draw the scene end  -----------------------*/
     }
@@ -289,7 +290,7 @@ user_scene_0_t *__arm_2d_scene0_init(   arm_2d_scene_player_t *ptDispAdapter,
 		.ptScene = &this.use_as__arm_2d_scene_t,
 	};
     fire_sim_init(&fire_sim,&tCFG);
-	fire_init();
+    fire_init();
     /* ------------   initialize members of user_scene_0_t end   ---------------*/
 
     arm_2d_scene_player_append_scenes(  ptDispAdapter, 
