@@ -21,7 +21,7 @@
 #define __USER_SCENE0_IMPLEMENT__
 
 #include "arm_2d_scene_0.h"
-
+#include "arm_2d_scene_user_matrix.h"
 
 #if defined(RTE_Acceleration_Arm_2D_Helper_PFB)
 
@@ -187,13 +187,32 @@ static void __on_scene0_frame_complete(arm_2d_scene_t *ptScene)
     user_scene_0_t *ptThis = (user_scene_0_t *)ptScene;
     ARM_2D_UNUSED(ptThis);
     fire_sim_on_frame_complete(&fire_sim);
+    RG_PROCESS_MSG(this.ptGUI, ptMSG) {
+        ARM_2D_UNUSED(bIsMessageHandled);
+        
+        switch(ngy_helper_msg_item_get_id(ptMSG)) {
+            case NGY_MSG_GESTURE_EVT_WHEEL:
+                arm_2d_scene_player_switch_to_next_scene(ptScene->ptPlayer);
+                break;
+            /* key pressed */
+            case NGY_MSG_KEY_EVT_PRESSED:
+                arm_2d_scene_player_switch_to_next_scene(ptScene->ptPlayer);
+                break;    
+
+            default:
+                break;
+        }
+    }
 }
 
 static void __before_scene0_switching_out(arm_2d_scene_t *ptScene)
 {
     user_scene_0_t *ptThis = (user_scene_0_t *)ptScene;
     ARM_2D_UNUSED(ptThis);
-
+    user_scene_matrix_t *ptMaterix 
+        = arm_2d_scene_matrix_init(this.use_as__arm_2d_scene_t.ptPlayer);
+    assert(NULL != ptMaterix);
+    ptMaterix->ptGUI = &g_tMyGUI;
 }
 
 static

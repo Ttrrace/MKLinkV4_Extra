@@ -20,6 +20,7 @@
 
 #define __USER_SCENE_MATRIX_IMPLEMENT__
 #include "arm_2d_scene_user_matrix.h"
+#include "arm_2d_scene_0.h"
 #if defined(RTE_Acceleration_Arm_2D_Helper_PFB)
 
 #include <stdlib.h>
@@ -332,10 +333,11 @@ static void __before_scene_matrix_switching_out(arm_2d_scene_t *ptScene)
           &DISP0_ADAPTER,
           ARM_2D_SCENE_SWITCH_MODE_FADE_BLACK);    
 
-    //user_scene_menu_t *ptMenu
-    //    =  arm_2d_scene_menu_init(this.use_as__arm_2d_scene_t.ptPlayer);
-    //assert(NULL != ptMenu);
-    //ptMenu->ptGUI = &g_tMyGUI;
+
+    user_scene_0_t *ptFire
+        = arm_2d_scene0_init(this.use_as__arm_2d_scene_t.ptPlayer);
+    assert(NULL != ptFire);
+    ptFire->ptGUI = &g_tMyGUI;
 }
 
 static
