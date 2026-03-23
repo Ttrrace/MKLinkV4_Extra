@@ -48,15 +48,15 @@ void app_init(ref_gui_t *ptGUI)
     arm_2d_scene_player_flush_fifo(ptDispAdapter);
 
 
-    //user_scene_0_t *ptFire
-    //    = arm_2d_scene0_init(ptDispAdapter);
-    //assert(NULL != ptFire);
-    //ptFire->ptGUI = ptGUI;
+    user_scene_0_t *ptFire
+        = arm_2d_scene0_init(ptDispAdapter);
+    assert(NULL != ptFire);
+    ptFire->ptGUI = ptGUI;
 
-    user_scene_matrix_t *ptMaterix 
-        = arm_2d_scene_matrix_init(ptDispAdapter);
-    assert(NULL != ptMaterix);
-    ptMaterix->ptGUI = ptGUI;
+    //user_scene_matrix_t *ptMaterix 
+    //    = arm_2d_scene_matrix_init(ptDispAdapter);
+    //assert(NULL != ptMaterix);
+    //ptMaterix->ptGUI = ptGUI;
 
 
 }

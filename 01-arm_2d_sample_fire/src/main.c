@@ -14,12 +14,12 @@
 #include "hpm_mchtmr_drv.h"
 #include "hpm_ppor_drv.h"
 #include "st7789.h"
-#include "arm_2d_helper.h"
-#include "ref_gui.h"
 #include "rtt_port.h"
 #include "rtthread.h"
+#include "usb_config.h"
 #include "key_task.h"
-
+#include "qmi8658.h"
+#include "power_control.h"
 void rt_hw_board_init(void)
 {
     board_init();
@@ -30,13 +30,21 @@ void rt_hw_board_init(void)
 }
 
 extern int arm_2d_scene_app_player_init(void);
+extern void cdc_acm_init(uint8_t busid, uint32_t reg_base);
 
 int main(void)
 {
     init_cycle_counter(false);
+    board_init_usb((USB_Type *)CONFIG_HPM_USBD_BASE);
+    intc_set_irq_priority(CONFIG_HPM_USBD_IRQn, 2);
+    cdc_acm_init(0, CONFIG_HPM_USBD_BASE);
+    ADC_Init();
+    Power_PWM_Init();
     key_init();
     key_encoder_init();
+    qmi8658_task_init();
     arm_2d_scene_app_player_init();
+
     while(1) {
         key_module_display(1);  
         rt_thread_mdelay(1);
