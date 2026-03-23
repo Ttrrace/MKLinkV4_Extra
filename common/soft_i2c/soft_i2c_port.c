@@ -113,7 +113,7 @@ static void set_sda_out()
   HPM_IOC->PAD[PIN_TMS].FUNC_CTL = IOC_PAD_FUNC_CTL_ALT_SELECT_SET(0); /* as gpio*/
   HPM_IOC->PAD[PIN_TMS].PAD_CTL = IOC_PAD_PAD_CTL_PRS_SET(2) | IOC_PAD_PAD_CTL_PE_SET(1) | IOC_PAD_PAD_CTL_PS_SET(1);
   gpiom_set_pin_controller(HPM_GPIOM, GPIOM_ASSIGN_GPIOB, PIN_TMS_NUM, gpiom_core0_fast);
-    gpio_set_pin_output(PIN_GPIO, PIN_PORT, PIN_TMS_NUM);
+  gpio_set_pin_output(PIN_GPIO, PIN_PORT, PIN_TMS_NUM);
 }
 
 /**
@@ -122,7 +122,7 @@ static void set_sda_out()
 static void set_sda_in()
 {
     gpio_write_pin(PIN_GPIO, PIN_PORT, PIN_TMS_DIR_NUM, false);
-    HPM_IOC->PAD[PIN_TMS].PAD_CTL = IOC_PAD_PAD_CTL_PRS_SET(2);
+    HPM_IOC->PAD[PIN_TMS].PAD_CTL =  IOC_PAD_PAD_CTL_OD_SET(1);
     HPM_IOC->PAD[PIN_TMS].FUNC_CTL = IOC_PAD_FUNC_CTL_ALT_SELECT_SET(0);
     gpio_set_pin_input(PIN_GPIO, PIN_PORT, PIN_TMS_NUM);
     gpiom_set_pin_controller(HPM_GPIOM, GPIOM_ASSIGN_GPIOB, PIN_TMS_NUM, gpiom_core0_fast);
@@ -163,7 +163,6 @@ misaka_soft_i2c_t *misaka_soft_i2c_port_init()
     i2c_obj.set_sda_out = set_sda_out;
     i2c_obj.set_sda_in = set_sda_in;
     i2c_obj.us = 10;
-
 
     set_sda(1);
     set_scl(1);

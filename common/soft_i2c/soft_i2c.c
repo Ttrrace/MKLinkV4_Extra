@@ -77,6 +77,7 @@ static uint8_t misaka_soft_i2c_wait_ack(const misaka_soft_i2c_t *ops)
 	ops->set_sda(1);
 	ops->delay_us((ops->us + 1) >> 1);
 	ops->set_scl(1);
+	ops->delay_us((ops->us + 1) >> 1);
 	ack = !ops->get_sda();
 	ops->set_scl(0);
 
@@ -197,6 +198,7 @@ static void misaka_soft_i2c_send_ack_or_nack(const misaka_soft_i2c_t *ops, uint8
 	}
 	ops->delay_us((ops->us + 1) >> 1);
 	ops->set_scl(1);
+        ops->delay_us((ops->us + 1) >> 1);
 	ops->set_scl(0);
 }
 

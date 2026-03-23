@@ -14,7 +14,7 @@ static void qmi8658_thread_entry(void *parameter)
     while(1) {
         if(qmi8658_init_ret == 1){
             QMI8658A_Get_G_DPS(DATA_GY_ACC);
-             printf("%f\r\n",DATA_GY_ACC[0]);
+            printf("%f %f %f\r\n",DATA_GY_ACC[0],DATA_GY_ACC[1],DATA_GY_ACC[2]);
         }
         rt_thread_delay(50);
     }
