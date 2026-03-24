@@ -8,13 +8,16 @@
 #include "usbd_core.h"
 #include "usbd_cdc_acm.h"
 #include "rtthread.h"
-
+#include "microboot.h"
 
 /*!< endpoint address */
 #define CDC_IN_EP  0x81
 #define CDC_OUT_EP 0x01
 #define CDC_INT_EP 0x83
-
+static    uint8_t chConsoleBuffer[1024];
+static    uint8_t chCdcSendBuffer[512];
+static    byte_queue_t   tConsoleQueue;
+static volatile bool bIsConsoleInit = false;
 /*!< config descriptor size */
 #define USB_CONFIG_SIZE (9 + CDC_ACM_DESCRIPTOR_LEN)
 
@@ -110,8 +113,8 @@ const struct usb_descriptor cdc_descriptor = {
 USB_NOCACHE_RAM_SECTION USB_MEM_ALIGNX uint8_t read_buffer[2][512];
 USB_NOCACHE_RAM_SECTION USB_MEM_ALIGNX uint8_t write_buffer[2048];
 volatile uint8_t read_buffer_index;
-volatile bool dtr_enable;
-volatile bool ep_tx_busy_flag;
+volatile bool dtr_enable = false;
+volatile bool ep_tx_busy_flag = false;
 
 static void usbd_event_handler(uint8_t busid, uint8_t event)
 {
@@ -129,6 +132,7 @@ static void usbd_event_handler(uint8_t busid, uint8_t event)
     case USBD_EVENT_CONFIGURED:
         /* setup first out ep read transfer */
         read_buffer_index = 0;
+        ep_tx_busy_flag = false;
         usbd_ep_start_read(busid, CDC_OUT_EP, &read_buffer[0][0], usbd_get_ep_mps(busid, CDC_OUT_EP));
         break;
     case USBD_EVENT_SET_REMOTE_WAKEUP:
@@ -159,7 +163,12 @@ void usbd_cdc_acm_bulk_in(uint8_t busid, uint8_t ep, uint32_t nbytes)
         /* send zlp */
         usbd_ep_start_write(busid, ep, NULL, 0);
     } else {
-        ep_tx_busy_flag = false;
+        if(get_queue_count(&tConsoleQueue)){
+            uint16_t len = dequeue(&tConsoleQueue, chCdcSendBuffer, get_queue_count(&tConsoleQueue));
+            usbd_ep_start_write(busid, ep, chCdcSendBuffer, len);
+        }else{
+            ep_tx_busy_flag = false;
+        }
     }
 }
 
@@ -196,16 +205,27 @@ void usbd_cdc_acm_set_dtr(uint8_t busid, uint8_t intf, bool dtr)
 
     if (dtr) {
         dtr_enable = 1;
+        if(ep_tx_busy_flag == false){
+            uint16_t len = dequeue(&tConsoleQueue, chCdcSendBuffer, get_queue_count(&tConsoleQueue));   
+            usbd_ep_start_write(0, CDC_IN_EP, chCdcSendBuffer, len);
+            ep_tx_busy_flag = true;
+        }
     }
 }
 
 int __SEGGER_RTL_X_file_write(__SEGGER_RTL_FILE *file, const char *data, unsigned int size)
 {
-    if(dtr_enable){
-        usbd_ep_start_write(0, CDC_IN_EP, data, size);
-        ep_tx_busy_flag = true;
-        while(ep_tx_busy_flag == true);
+    if(bIsConsoleInit == 0){
+        bIsConsoleInit = 1;
+        queue_init(&tConsoleQueue, chConsoleBuffer, sizeof(chConsoleBuffer));
     }
+    enqueue(&tConsoleQueue, data, size);
+    if(ep_tx_busy_flag == false && dtr_enable == 1){
+        uint16_t len = dequeue(&tConsoleQueue, chCdcSendBuffer, get_queue_count(&tConsoleQueue));   
+        usbd_ep_start_write(0, CDC_IN_EP, chCdcSendBuffer, len);
+        ep_tx_busy_flag = true;
+    }
+
     return size;
 }
 
