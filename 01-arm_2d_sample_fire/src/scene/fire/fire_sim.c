@@ -108,18 +108,6 @@ void Fluid_integrate(Fluid *f, float dt, float gravity) {
 	}
 }
 
-void Fluid_disturb(Fluid *f, float dt, float a) {
-	int n = f->numY;
-	for (int i = 1; i < f->numX; i++) {
-		for (int j = 1; j < f->numY - 1; j++) {
-			// 如果当前格子和下方格子都是流体，则应用重力
-			if (f->s[i * n + j] != 0.0f && f->s[i * n + j - 1] != 0.0f) {
-				f->v[i * n + j] += a * dt;
-                                f->u[i * n + j] += a * dt;
-			}
-		}
-	}
-}
 
 // 压力求解：保证不可压缩性
 void Fluid_solveIncompressibility(Fluid *f, int numIters, float dt) {
@@ -306,13 +294,46 @@ void Fluid_updateFire(Fluid *f, float dt) {
 	float fireCooling =  1.2f * dt;        // 火焰冷却速度
 	float smokeCooling = 0.4f * dt;       // 烟雾冷却速度
 	float lift = 3.5f;                     // 火焰升力
+        float k_motion = 5.0;
         extern float_t DATA_GY_ACC[6];
         #ifdef AXIS_INPUT
-        if(DATA_GY_ACC[1] != 0){
-           scene.sinW = DATA_GY_ACC[1];//TEST
+
+        float ax, ay, az;
+        ax = DATA_GY_ACC[0];
+        ay = DATA_GY_ACC[1];
+        az = DATA_GY_ACC[2];
+
+        // 
+        static float gxf = 0;
+        static float gyf = 0;
+        static float gzf = 0;
+
+
+        float Ylift,Xlift = 0;
+
+        float alpha = 0.1f;      //重力部分低通滤波
+
+        gxf = (1 - alpha) * gxf + alpha * ax;
+        gyf = (1 - alpha) * gyf + alpha * ay;
+        gzf = (1 - alpha) * gzf + alpha * az;
+
+        float norm = sqrtf(gyf*gyf + gzf*gzf) + 1e-6f;
+        float gx = gyf / norm;   //棱镜反射平面内的水平和竖直加速度方向
+        float gy = gzf / norm;
+        
+        float lin_x = ay - gyf;   //分离出高速抖动
+        float lin_y = az - gzf;
+
+        float lift_x = gx;
+        float lift_y = gy;
+
+        if(az < -0.1){
+            Ylift = -sqrt(1 - (lift_x * lift_x)) * lift;
+        }else{
+            Ylift =  sqrt(1 - (lift_x * lift_x)) * lift;
         }
-        float Ylift = sqrt(1 - (scene.sinW * scene.sinW)) * lift;
-        float Xlift = scene.sinW * lift;//scene.sinW;
+            Xlift = lift_x * lift;    
+
         #endif
 
 	float acceleration = 5.0f * dt;        // 加速度
@@ -401,8 +422,8 @@ void Fluid_updateFire(Fluid *f, float dt) {
 			float u = f->u[i * n + j];
 			float v = f->v[i * n + j];
               #ifdef AXIS_INPUT
-                    float targetV = t * Ylift;
-                    float targetU = t * Xlift;
+                    float targetV = t * Ylift - k_motion * lin_y;
+                    float targetU = t * Xlift + k_motion * lin_x;
                     f->v[i * n + j] += (targetV - v) * acceleration;
                     f->u[i * n + j] += (targetU - u) * acceleration;
 
@@ -412,9 +433,7 @@ void Fluid_updateFire(Fluid *f, float dt) {
 
 
               #endif
-
-			
-			
+	
 			int numNewSwirls = 0;
 			
 			// 燃烧环（改为椭圆形，底部更宽）
