@@ -10,7 +10,7 @@ float_t DATA_GY_ACC[6];
 static void qmi8658_thread_entry(void *parameter)
 {
     int qmi8658_init_ret = QMI8658A_Init();
-   	
+    printf("qmi8658 ret = %d",qmi8658_init_ret);   	
     while(1) {
         if(qmi8658_init_ret == 1){
             QMI8658A_Get_G_DPS(DATA_GY_ACC);
